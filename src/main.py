@@ -64,16 +64,18 @@ while True:
     s = cross(y,k)
     v = cross(s,k)
 
+    vrot = rotate(v, angle=roll, axis=k)
+    srot = rotate(s, angle=roll, axis=k)
     frontArrow.axis = k
     frontArrow.length = 4
     frontArrow.shaftwidth = 0.1
-    sideArrow.axis = s
+    sideArrow.axis = srot
     sideArrow.length = 2
     sideArrow.shaftwidth = 0.1
-    upArrow.axis = -v
+    upArrow.axis = -vrot
     upArrow.length = 2
     upArrow.shaftwidth = 0.1
 
     myObj.axis = k
-    myObj.up = -v
+    myObj.up = -vrot
     # time.sleep(0.1)
