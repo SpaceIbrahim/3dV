@@ -17,24 +17,40 @@ scene.forward = vector(-1,-1,-1)
 scene.width = 800
 scene.height = 600
 
-xArrow = arrow(length=2, shaftWidth=0.1, axis=vector(1,0,0), color=color.red)
-yArrow = arrow(length=2, shaftWidth=0.1, axis=vector(0,1,0), color=color.green)
-zArrow = arrow(length=2, shaftWidth=0.1, axis=vector(0,0,1), color=color.blue)
+xArrow = arrow(length=2, axis=vector(1,0,0), color=color.red)
+yArrow = arrow(length=2, axis=vector(0,1,0), color=color.green)
+zArrow = arrow(length=2, axis=vector(0,0,1), color=color.blue)
+
+xArrow.shaftwidth = 0.1
+yArrow.shaftwidth = 0.1
+zArrow.shaftwidth = 0.1
 
 frontArrow = arrow(length=4, shaftWidth=0.1, axis=vector(1,0,0), color=color.purple)
 sideArrow = arrow(length=2, shaftWidth=0.1, axis=vector(0,1,0), color=color.orange)
 upArrow = arrow(length=1, shaftWidth=0.1, axis=vector(0,0,1), color=color.magenta)
 
-bBoard = box(length=4, height=.2, width=2, color=color.white, opacity=0.8, pos=vector(0,0,0))
-bn = box(length=1, height=0.1, width=.72, color=color.blue, opacity=0.8, pos=vector(0.5,0.15,0))
+# Define the body of the drone
+body = box(pos=vector(0, 0, 0), size=vector(1.5, 0.25, 1), color=color.gray(0.5))
 
+# Define the arms of the drone
+arm1 = cylinder(pos=vector(0.5, 0, -0.5), axis=vector(0.5, 0, -1), radius=0.1, color=color.white)
+arm2 = cylinder(pos=vector(-0.5, 0, -0.5), axis=vector(-0.5, 0, -1), radius=0.1, color=color.white)
+arm3 = cylinder(pos=vector(0.5, 0, 0.5), axis=vector(0.5, 0, 1), radius=0.1, color=color.white)
+arm4 = cylinder(pos=vector(-0.5, 0, 0.5), axis=vector(-0.5, 0, 1), radius=0.1, color=color.white)
+
+# Define the rotors
+rotor1 = cylinder(pos=vector(1, 0.1, -1.5), axis=vector(0, 0.1, 0), radius=0.15, color=color.blue)
+rotor2 = cylinder(pos=vector(1, 0.1, 1.5), axis=vector(0, 0.1, 0), radius=0.15, color=color.blue)
+rotor3 = cylinder(pos=vector(-1, 0.1, -1.5), axis=vector(0, 0.1, 0), radius=0.15, color=color.blue)
+rotor4 = cylinder(pos=vector(-1, 0.1, 1.5), axis=vector(0, 0.1, 0), radius=0.15, color=color.blue)
+
+myObj = compound([body, arm1, arm2, arm3, arm4, rotor1, rotor2, rotor3, rotor4])
+myObj.rotate(angle=radians(90), axis=vector(0, 1, 0))
 yaw = 0
 pitch = 0
 roll = 0
 
 tester = False
-
-myObj = compound([bBoard, bn])
 while True:
     if ser.in_waiting > 0:
         line = ser.readline().decode('utf-8').strip()
@@ -65,6 +81,7 @@ while True:
     v = cross(s,k)
 
     vrot = rotate(v, angle=roll, axis=k)
+
     srot = rotate(s, angle=roll, axis=k)
     frontArrow.axis = k
     frontArrow.length = 4
